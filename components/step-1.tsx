@@ -1,79 +1,68 @@
-// components/Step1.js
+"use client";
+
 import { useFormContext } from "react-hook-form";
 import { FormControl, FormItem } from "./ui/form";
 import { Label } from "./ui/label";
 import { Input } from "./ui/input";
+import CustomInput from "./custom-input";
+import InfoBox from "./info-box";
+import PhoneNumberInput from "./phone-number-input";
+import { useState } from "react";
 
 const Step1: React.FC = () => {
   const { register } = useFormContext<FormData>(); // Specify FormData type
+  const [phoneNumber, setPhoneNumber] = useState("");
+
+  const handlePhoneNumberChange = (value: string) => {
+    setPhoneNumber(value);
+  };
   return (
     <div className="space-y-6">
-      <FormItem>
-        <Label
-          htmlFor="companyName"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Full Name of Entity/Individual
-        </Label>
-        <FormControl>
-          <Input
-            id="companyName"
-            {...register("companyName", { required: true })}
-            className="w-full p-2 border border-gray-300 rounded mt-1"
-          />
-        </FormControl>
-      </FormItem>
-
-      <FormItem>
-        <Label
-          htmlFor="email"
-          className="block text-sm font-medium text-gray-700"
-        >
-          Email Address
-        </Label>
-        <FormControl>
-          <Input
-            id="email"
-            type="email"
-            {...register("email", { required: true })}
-            className="w-full p-2 border border-gray-300 rounded mt-1"
-          />
-        </FormControl>
-      </FormItem>
-
-      <div className="flex space-x-4">
-        <FormItem className="w-1/2">
-          <Label
-            htmlFor="countryCode"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Country Code
-          </Label>
-          <FormControl>
-            <Input
-              id="countryCode"
-              {...register("countryCode", { required: true })}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            />
-          </FormControl>
-        </FormItem>
-
-        <FormItem className="w-1/2">
-          <Label
-            htmlFor="country"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Country
-          </Label>
-          <FormControl>
-            <Input
-              id="country"
-              {...register("country", { required: true })}
-              className="w-full p-2 border border-gray-300 rounded mt-1"
-            />
-          </FormControl>
-        </FormItem>
-      </div>
+      <CustomInput
+        label="Full Name of Entity/Individual"
+        id="entityName"
+        name="entityName"
+        placeholder="Enter full name"
+        type="text"
+        required={true}
+      />
+      <CustomInput
+        label="Email Address"
+        id="entityName"
+        name="entityName"
+        placeholder="Enter full name"
+        type="email"
+        required={true}
+      />
+      <CustomInput
+        label="Email Address"
+        id="entityName"
+        name="entityName"
+        placeholder="Enter full name"
+        type="email"
+        required={true}
+      />
+      <CustomInput
+        label="Email Address"
+        id="entityName"
+        name="entityName"
+        placeholder="Enter full name"
+        type="email"
+        required={true}
+      />
+      <CustomInput
+        label="Email Address"
+        id="entityName"
+        name="entityName"
+        placeholder="Enter full name"
+        type="email"
+        required={true}
+      />
+      {/* <PhoneNumberInput
+        value={phoneNumber}
+        onChange={handlePhoneNumberChange}
+      /> */}
+      <InfoBox />
     </div>
   );
 };
