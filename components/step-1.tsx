@@ -28,7 +28,7 @@ const Step1: React.FC = () => {
   }, [phoneNumber, setValue, trigger, currentPhoneNumber]);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 lg:space-y-6">
       <CustomInput
         label="Full Name of Entity/Individual"
         id="entityName"
@@ -59,7 +59,7 @@ const Step1: React.FC = () => {
         {...register("streetName")}
       />
 
-      <div className="grid lg:grid-cols-2 gap-5">
+      <div className="grid md:grid-cols-2 md:gap-5">
         <CustomInput
           label="City"
           id="city"

@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "./ui/scroll-area";
+import { Label } from "./ui/label";
 
 type E164Number = string & { __tag: "E164Number" }; // Define E164Number type
 
@@ -34,22 +35,28 @@ const PhoneInput: React.ForwardRefExoticComponent<PhoneInputProps> =
   React.forwardRef<React.ElementRef<typeof RPNInput.default>, PhoneInputProps>(
     ({ className, onChange, ...props }, ref) => {
       return (
-        <RPNInput.default
-          ref={ref}
-          className={cn("flex", className)}
-          flagComponent={FlagComponent}
-          countrySelectComponent={CountrySelect}
-          inputComponent={InputComponent}
-          onChange={(value) => {
-            // Type guard to check if value is E164Number before passing it
-            if (value && typeof value === "string") {
-              onChange?.(value as E164Number);
-            } else {
-              onChange?.("");
-            }
-          }}
-          {...props}
-        />
+        <div>
+          <Label className="block text-[16px] font-semibold text-gray-700 mb-2">
+            Enter your Phone Number
+            <span className="text-red-500 ml-1">*</span>
+          </Label>
+          <RPNInput.default
+            ref={ref}
+            className={cn("flex", className)}
+            flagComponent={FlagComponent}
+            countrySelectComponent={CountrySelect}
+            inputComponent={InputComponent}
+            onChange={(value) => {
+              // Type guard to check if value is E164Number before passing it
+              if (value && typeof value === "string") {
+                onChange?.(value as E164Number);
+              } else {
+                onChange?.("");
+              }
+            }}
+            {...props}
+          />
+        </div>
       );
     }
   );

@@ -45,7 +45,7 @@ const CustomInput: React.FC<CustomInputProps> = ({
         id={id}
         {...register(name)} // Register the input field with react-hook-form
         className={cn(
-          "flex h-10 w-full rounded-[5px] border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground ring-offset-background transition-colors duration-150 ease-in-out border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-TealGreen focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-100",
+          "flex h-14 md:h-16 lg:h-10 w-full rounded-[5px] border bg-background px-3 py-2 text-sm placeholder:text-muted-foreground ring-offset-background transition-colors duration-150 ease-in-out border-gray-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-TealGreen focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-gray-100",
           errors[name]
             ? "border-red-500 focus-visible:ring-red-500"
             : "border-gray-300"

@@ -27,6 +27,19 @@ const formSchema = z.object({
   duration: z.string().min(1, "Duration is required"),
   paymentTerms: z.string().min(1, "Payment Terms are required"),
   description: z.string().min(1, "Detailed Description is required"),
+  confidentialityClause: z
+    .string()
+    .min(1, "Confidentiality Clause is required"),
+  terminationConditions: z
+    .string()
+    .min(1, "Termination Conditions are required"),
+  disputeResolutionMechanisms: z
+    .string()
+    .min(1, "Dispute Resolution Mechanisms are required"),
+  signatories: z
+    .string()
+    .min(1, "Names and Titles of the Signatories are required"),
+  signingDate: z.string().min(1, "Date of Signing is required"),
 });
 
 const MultiStepForm = () => {
@@ -46,6 +59,11 @@ const MultiStepForm = () => {
       duration: "",
       paymentTerms: "",
       description: "",
+      confidentialityClause: "",
+      terminationConditions: "",
+      disputeResolutionMechanisms: "",
+      signatories: "",
+      signingDate: "",
     },
     mode: "onChange", // Validate on change for real-time feedback
   });
@@ -67,10 +85,9 @@ const MultiStepForm = () => {
         <div className="space-y-6">
           {step === 1 && <Step1 />}
           {step === 2 && <Step2 />}
-          {step === 3 && <Step3 onBack={prevStep} />}
-
+          {step === 3 && <Step3 />} {/* Pass the onBack prop */}
           <div className="flex justify-between mt-4">
-            {step > 1 && (
+            {step > 1 && step <= 3 && (
               <Button
                 type="button" // Type "button" to prevent form submission
                 onClick={prevStep}
