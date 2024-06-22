@@ -1,3 +1,4 @@
+// components/MultiStepForm.tsx
 "use client";
 
 import { useState } from "react";
@@ -10,6 +11,7 @@ import Step2 from "./step-2";
 import Step3 from "./step-3";
 import CardHeader from "./card-header";
 
+// Define the schema with all required fields
 const formSchema = z.object({
   entityName: z.string().min(1, "Full Name of Entity/Individual is required"),
   email: z.string().email("Invalid email address"),
@@ -20,9 +22,11 @@ const formSchema = z.object({
   streetName: z.string().min(1, "Street Name is required"),
   city: z.string().min(1, "City is required"),
   country: z.string().min(1, "Country is required"),
-  // Add fields for subsequent steps if needed
-  // exampleFieldFromStep2: z.string().optional(),
-  // exampleFieldFromStep3: z.string().optional(),
+  contractType: z.string().min(1, "Type of Contract is required"),
+  effectiveDate: z.string().min(1, "Effective Date is required"),
+  duration: z.string().min(1, "Duration is required"),
+  paymentTerms: z.string().min(1, "Payment Terms are required"),
+  description: z.string().min(1, "Detailed Description is required"),
 });
 
 const MultiStepForm = () => {
@@ -37,11 +41,13 @@ const MultiStepForm = () => {
       streetName: "",
       city: "",
       country: "",
-      // Default values for subsequent steps
-      // exampleFieldFromStep2: "",
-      // exampleFieldFromStep3: "",
+      contractType: "",
+      effectiveDate: "",
+      duration: "",
+      paymentTerms: "",
+      description: "",
     },
-    mode: "onChange", // Run validation on change to provide immediate feedback
+    mode: "onChange", // Validate on change for real-time feedback
   });
 
   const { handleSubmit, formState } = form;
@@ -66,6 +72,7 @@ const MultiStepForm = () => {
           <div className="flex justify-between mt-4">
             {step > 1 && (
               <Button
+                type="button" // Type "button" to prevent form submission
                 onClick={prevStep}
                 variant="secondary"
                 className="px-4 py-2"
@@ -75,14 +82,15 @@ const MultiStepForm = () => {
             )}
             {step < 3 ? (
               <Button
+                type="button" // Type "button" to prevent form submission
                 onClick={nextStep}
-                className="px-6 py-2"
-                disabled={!isValid} // Disable the button if the form is not valid
+                className="px-4 py-2"
+                // disabled={!isValid} // Disable the button if the form is not valid
               >
                 Next
               </Button>
             ) : (
-              <Button type="submit" className="px-6 py-2" disabled={!isValid}>
+              <Button type="submit" className="px-4 py-2" disabled={!isValid}>
                 Submit
               </Button>
             )}
