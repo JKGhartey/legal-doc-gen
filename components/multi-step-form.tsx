@@ -11,9 +11,14 @@ import Step3 from "./step-3";
 import CardHeader from "./card-header";
 
 const formSchema = z.object({
-  companyName: z.string().min(1, "Company Name is required"),
+  entityName: z.string().min(1, "Full Name of Entity/Individual is required"),
   email: z.string().email("Invalid email address"),
-  countryCode: z.string().min(1, "Country Code is required"),
+  phoneNumber: z
+    .string()
+    .nonempty("Phone number is required")
+    .regex(/^\+?[1-9]\d{1,14}$/, "Invalid phone number"),
+  streetName: z.string().min(1, "Street Name is required"),
+  city: z.string().min(1, "City is required"),
   country: z.string().min(1, "Country is required"),
 });
 
@@ -22,9 +27,11 @@ const MultiStepForm = () => {
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      companyName: "",
+      entityName: "",
       email: "",
-      countryCode: "",
+      phoneNumber: "",
+      streetName: "",
+      city: "",
       country: "",
     },
   });
