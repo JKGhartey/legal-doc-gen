@@ -20,10 +20,14 @@ const formSchema = z.object({
   streetName: z.string().min(1, "Street Name is required"),
   city: z.string().min(1, "City is required"),
   country: z.string().min(1, "Country is required"),
+  // Add fields for subsequent steps if needed
+  // exampleFieldFromStep2: z.string().optional(),
+  // exampleFieldFromStep3: z.string().optional(),
 });
 
 const MultiStepForm = () => {
   const [step, setStep] = useState(1);
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,21 +37,27 @@ const MultiStepForm = () => {
       streetName: "",
       city: "",
       country: "",
+      // Default values for subsequent steps
+      // exampleFieldFromStep2: "",
+      // exampleFieldFromStep3: "",
     },
+    mode: "onChange", // Run validation on change to provide immediate feedback
   });
+
+  const { handleSubmit, formState } = form;
+  const { isValid } = formState; // Get validation status from formState
 
   const nextStep = () => setStep((prev) => prev + 1);
   const prevStep = () => setStep((prev) => prev - 1);
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+    console.log("Form Values:", values);
+    // Handle form submission
   }
 
   return (
     <FormProvider {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div className="space-y-6">
           {step === 1 && <Step1 />}
           {step === 2 && <Step2 />}
@@ -64,11 +74,15 @@ const MultiStepForm = () => {
               </Button>
             )}
             {step < 3 ? (
-              <Button onClick={nextStep} className="px-4 py-2">
+              <Button
+                onClick={nextStep}
+                className="px-6 py-2"
+                disabled={!isValid} // Disable the button if the form is not valid
+              >
                 Next
               </Button>
             ) : (
-              <Button type="submit" className="px-4 py-2">
+              <Button type="submit" className="px-6 py-2" disabled={!isValid}>
                 Submit
               </Button>
             )}
