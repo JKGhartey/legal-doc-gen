@@ -9,7 +9,8 @@ import { Button } from "./ui/button";
 import Step1 from "./step-1";
 import Step2 from "./step-2";
 import Step3 from "./step-3";
-import CardHeader from "./card-header";
+import Review from "./review";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 
 // Define the schema with all required fields
 const formSchema = z.object({
@@ -85,15 +86,23 @@ const MultiStepForm = () => {
         <div className="space-y-6">
           {step === 1 && <Step1 />}
           {step === 2 && <Step2 />}
-          {step === 3 && <Step3 />} {/* Pass the onBack prop */}
-          <div className="flex justify-between mt-4">
-            {step > 1 && step <= 3 && (
+          {step === 3 && <Step3 />}
+          {step === 4 && (
+            <Review
+              onBack={() => setStep(3)} // Navigate back to Step 3
+              onSubmit={handleSubmit(onSubmit)} // Submit the form from the review step
+            />
+          )}
+
+          <div className="flex flex-col md:flex-row justify-between mt-4 gap-4">
+            {step > 1 && step < 4 && (
               <Button
                 type="button" // Type "button" to prevent form submission
                 onClick={prevStep}
                 variant="secondary"
-                className="px-4 py-2"
+                className="py-[25px] px-[22px] bg-Ash hover:bg-Ash/90 text-black font-semibold uppercase"
               >
+                <ArrowLeft size="16px" className="mr-[10px] font-bold" />
                 Previous Step
               </Button>
             )}
@@ -101,15 +110,41 @@ const MultiStepForm = () => {
               <Button
                 type="button" // Type "button" to prevent form submission
                 onClick={nextStep}
-                className="px-4 py-2"
+                className="py-[25px] px-[22px] font-semibold uppercase"
                 // disabled={!isValid} // Disable the button if the form is not valid
               >
                 Next
+                <ArrowRight size="16px" className="ml-[10px] font-bold" />
+              </Button>
+            ) : step === 3 ? (
+              <Button
+                type="button"
+                onClick={() => setStep(4)} // Navigate to Review step
+                className="py-[25px] px-[22px] font-semibold uppercase"
+                // disabled={!isValid} // Disable the button if the form is not valid
+              >
+                Review
               </Button>
             ) : (
-              <Button type="submit" className="px-4 py-2" disabled={!isValid}>
-                Submit
-              </Button>
+              <div className="flex flex-col md:flex-row gap-4">
+                <Button
+                  type="button" // Type "button" to prevent form submission
+                  onClick={prevStep}
+                  variant="secondary"
+                  className="py-[25px] px-[22px] bg-Ash hover:bg-Ash/90 text-black font-semibold uppercase"
+                >
+                  <ArrowLeft size="16px" className="mr-[10px] font-bold" />
+                  Go Back
+                </Button>
+
+                <Button
+                  type="submit"
+                  className="py-[25px] px-[22px] uppercase"
+                  disabled={!isValid} // Submission also requires form to be valid
+                >
+                  Submit
+                </Button>
+              </div>
             )}
           </div>
         </div>

@@ -4,12 +4,14 @@
 import { useFormContext } from "react-hook-form";
 import CustomInput from "./custom-input";
 import { DatePicker } from "./ui/date-picker";
+import CardHeader from "./card-header";
 
 const Step3: React.FC = () => {
   const { register } = useFormContext(); // Access form context
 
   return (
     <div className="space-y-4 lg:space-y-6">
+      <CardHeader title="Specific Clauses" />
       {/* Specific Clauses */}
       <div>
         <label

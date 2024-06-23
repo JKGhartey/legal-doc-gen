@@ -31,7 +31,6 @@ const HomePage: React.FC = () => {
   return (
     <div className=" flex items-center justify-center bg-gradient-to-b from-gray-100 to-gray-200">
       <FormCard>
-        <CardHeader title="What Kind of Document do you want?" />
         <MultiStepForm />
       </FormCard>
     </div>

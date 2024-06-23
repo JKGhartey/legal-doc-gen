@@ -23,6 +23,7 @@ module.exports = {
         TealGreen: "#52796F",
         Sage: "#84A98C",
         Mint: "#CAD2C5",
+        Ash: "#EAEAEA",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

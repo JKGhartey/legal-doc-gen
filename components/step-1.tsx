@@ -6,6 +6,7 @@ import InfoBox from "./info-box";
 import { useState, useEffect } from "react";
 import { PhoneInput } from "./phone-number-input";
 import { Country } from "react-phone-number-input";
+import CardHeader from "./card-header";
 
 const Step1: React.FC = () => {
   const {
@@ -29,6 +30,7 @@ const Step1: React.FC = () => {
 
   return (
     <div className="space-y-4 lg:space-y-6">
+      <CardHeader title="Basic Information" />
       <CustomInput
         label="Full Name of Entity/Individual"
         id="entityName"

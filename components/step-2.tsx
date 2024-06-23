@@ -5,6 +5,7 @@ import { useFormContext } from "react-hook-form";
 import CustomInput from "./custom-input";
 import { DatePicker } from "./ui/date-picker";
 import CustomSelect from "./custom-select";
+import CardHeader from "./card-header";
 
 const Step2: React.FC = () => {
   const { register } = useFormContext(); // Access form context
@@ -27,6 +28,7 @@ const Step2: React.FC = () => {
 
   return (
     <div className="space-y-4 lg:space-y-6">
+      <CardHeader title="Contract Details" />
       <CustomInput
         label="Type of Contract"
         id="contractType"
