@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M0 0H1V32H0z" fill="black" fill-opacity="1"/>
+  <path d="M0 0H1V32H0z" fill="currentColor" fill-opacity="0.1"/>
   <path d="M16 0H17V32H16z" fill="currentColor" fill-opacity="0.1"/>
   <path d="M31 0H32V32H31z" fill="currentColor" fill-opacity="0.1"/>
   <path d="M0 0V1H32V0z" fill="currentColor" fill-opacity="0.1"/>

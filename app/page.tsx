@@ -138,7 +138,7 @@ export default function Home() {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="relative overflow-hidden pt-32 sm:pt-36 lg:pt-40">
+      <section className="relative overflow-hidden pt-40 sm:pt-48 lg:pt-52">
         {/* Dashed Grid Background */}
         <div 
           className="pointer-events-none absolute inset-0 -z-10"
@@ -236,100 +236,32 @@ export default function Home() {
               </div>
 
               {/* Stats */}
-              <div className="mx-auto mt-16 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {[
-                  { title: 'Documents Generated', value: '10K+' },
-                  { title: 'Time Saved', value: '1000+ Hours' },
-                  { title: 'Happy Clients', value: '5K+' },
-                ].map((stat, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * index }}
-                    className="group relative overflow-hidden rounded-2xl bg-white/5 p-8 backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
-                  >
-                    {/* Background gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-TealGreen/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                    
-                    {/* Border gradient */}
-                    <div className="absolute inset-px rounded-2xl bg-gradient-to-br from-TealGreen/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                    
-                    {/* Content */}
-                    <div className="relative">
-                      <dt className="text-lg font-semibold leading-7 text-gray-700">
-                        {stat.title}
-                      </dt>
-                      <dd className="mt-2 text-3xl font-bold tracking-tight text-TealGreen">
-                        {stat.value}
-                      </dd>
-                    </div>
-                  </motion.div>
-                ))}
+              <div className="mx-auto mt-10 flex max-w-xl flex-wrap justify-center gap-8">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-TealGreen/10">
+                    <svg className="h-6 w-6 text-TealGreen" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-gray-900">100K+</div>
+                    <div className="text-sm text-gray-600">Documents Generated</div>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-TealGreen/10">
+                    <svg className="h-6 w-6 text-TealGreen" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                  </div>
+                  <div>
+                    <div className="text-2xl font-bold text-gray-900">99.9%</div>
+                    <div className="text-sm text-gray-600">Accuracy Rate</div>
+                  </div>
+                </div>
               </div>
 
-              {/* Features Grid */}
-              <div className="mt-20 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                {[
-                  {
-                    title: 'AI-Powered Generation',
-                    description: 'Create professional legal documents in minutes using advanced AI technology.',
-                    icon: '⚡'
-                  },
-                  {
-                    title: 'Template Library',
-                    description: 'Access hundreds of pre-built templates for various legal documents.',
-                    icon: '📚'
-                  },
-                  {
-                    title: 'Smart Analytics',
-                    description: 'Track and analyze your document generation patterns and usage.',
-                    icon: '📊'
-                  },
-                  {
-                    title: 'Secure Storage',
-                    description: 'All your documents are encrypted and stored securely in the cloud.',
-                    icon: '🔒'
-                  },
-                  {
-                    title: 'Collaboration Tools',
-                    description: 'Share and collaborate on documents with team members in real-time.',
-                    icon: '👥'
-                  },
-                  {
-                    title: 'Export Options',
-                    description: 'Export your documents in multiple formats including PDF, Word, and more.',
-                    icon: '📤'
-                  }
-                ].map((feature, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.1 * index }}
-                    className="group relative overflow-hidden rounded-2xl bg-white/5 p-8 backdrop-blur-sm transition-all duration-300 hover:bg-white/10"
-                  >
-                    {/* Background gradient */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-TealGreen/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                    
-                    {/* Border gradient */}
-                    <div className="absolute inset-px rounded-2xl bg-gradient-to-br from-TealGreen/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-                    
-                    {/* Content */}
-                    <div className="relative">
-                      <div className="mb-4 inline-block rounded-xl bg-TealGreen/10 p-3 text-2xl">
-                        {feature.icon}
-                      </div>
-                      <h3 className="text-lg font-semibold leading-7 text-gray-900">
-                        {feature.title}
-                      </h3>
-                      <p className="mt-2 text-gray-600">
-                        {feature.description}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+             
             </motion.div>
           </div>
 
@@ -491,7 +423,7 @@ export default function Home() {
                 description: 'Access a vast library of pre-approved templates for various legal documents.',
                 icon: (
                   <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V19a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                   </svg>
                 )
               }
