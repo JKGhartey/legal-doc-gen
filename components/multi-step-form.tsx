@@ -10,7 +10,12 @@ import Step1 from "./step-1";
 import Step2 from "./step-2";
 import Step3 from "./step-3";
 import Review from "./review";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
+import { ScrollArea } from "./ui/scroll-area";
+import Link from "next/link";
+import FormCard from "./form-card";
 
 // Define the schema with all required fields
 const formSchema = z.object({
@@ -66,88 +71,179 @@ const MultiStepForm = () => {
       signatories: "",
       signingDate: "",
     },
-    mode: "onChange", // Validate on change for real-time feedback
+    mode: "onChange",
   });
 
-  const { handleSubmit, formState } = form;
-  const { isValid } = formState; // Get validation status from formState
+  const { handleSubmit, formState, trigger } = form;
+  const { isValid, errors } = formState;
 
-  const nextStep = () => setStep((prev) => prev + 1);
+  const nextStep = async () => {
+    const fields = getFieldsForStep(step);
+    const isStepValid = await trigger(fields);
+    if (isStepValid) {
+      setStep((prev) => prev + 1);
+    }
+  };
+
   const prevStep = () => setStep((prev) => prev - 1);
+
+  const getFieldsForStep = (step: number): (keyof typeof formSchema._type)[] => {
+    switch (step) {
+      case 1:
+        return ['entityName', 'email', 'phoneNumber', 'streetName', 'city', 'country'];
+      case 2:
+        return ['contractType', 'effectiveDate', 'duration', 'paymentTerms'];
+      case 3:
+        return ['description', 'confidentialityClause', 'terminationConditions', 'disputeResolutionMechanisms'];
+      case 4:
+        return ['signatories', 'signingDate'];
+      default:
+        return [];
+    }
+  };
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Form Values:", values);
     // Handle form submission
   }
 
+  const steps = [
+    { number: 1, title: "Basic Information" },
+    { number: 2, title: "Contract Details" },
+    { number: 3, title: "Specific Clauses" },
+    { number: 4, title: "Review" },
+  ];
+
   return (
     <FormProvider {...form}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="space-y-6">
-          {step === 1 && <Step1 />}
-          {step === 2 && <Step2 />}
-          {step === 3 && <Step3 />}
-          {step === 4 && (
-            <Review
-              onBack={() => setStep(3)} // Navigate back to Step 3
-              onSubmit={handleSubmit(onSubmit)} // Submit the form from the review step
-            />
-          )}
-
-          <div className="flex flex-col md:flex-row justify-between mt-4 gap-4">
-            {step > 1 && step < 4 && (
-              <Button
-                type="button" // Type "button" to prevent form submission
-                onClick={prevStep}
-                variant="secondary"
-                className="py-[25px] px-[22px] bg-Ash hover:bg-Ash/90 text-black font-semibold uppercase"
-              >
-                <ArrowLeft size="16px" className="mr-[10px] font-bold" />
-                Previous Step
-              </Button>
-            )}
-            {step < 3 ? (
-              <Button
-                type="button" // Type "button" to prevent form submission
-                onClick={nextStep}
-                className="py-[25px] px-[22px] font-semibold uppercase"
-                // disabled={!isValid} // Disable the button if the form is not valid
-              >
-                Next
-                <ArrowRight size="16px" className="ml-[10px] font-bold" />
-              </Button>
-            ) : step === 3 ? (
-              <Button
-                type="button"
-                onClick={() => setStep(4)} // Navigate to Review step
-                className="py-[25px] px-[22px] font-semibold uppercase"
-                // disabled={!isValid} // Disable the button if the form is not valid
-              >
-                Review
-              </Button>
-            ) : (
-              <div className="flex flex-col md:flex-row gap-4">
-                <Button
-                  type="button" // Type "button" to prevent form submission
-                  onClick={prevStep}
-                  variant="secondary"
-                  className="py-[25px] px-[22px] bg-Ash hover:bg-Ash/90 text-black font-semibold uppercase"
+      <form onSubmit={handleSubmit(onSubmit)} className="h-full">
+        <FormCard
+          footer={
+            <>
+              {/* Error Summary */}
+              {Object.keys(errors).length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="mb-4 rounded-lg bg-red-50 p-4"
                 >
-                  <ArrowLeft size="16px" className="mr-[10px] font-bold" />
-                  Go Back
-                </Button>
+                  <p className="text-sm font-medium text-red-800">
+                    Please fill in all required fields correctly before proceeding.
+                  </p>
+                </motion.div>
+              )}
 
-                <Button
-                  type="submit"
-                  className="py-[25px] px-[22px] uppercase"
-                  disabled={!isValid} // Submission also requires form to be valid
-                >
-                  Submit
-                </Button>
+              {/* Navigation Buttons */}
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-3">
+                  <Link href="/dashboard">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      className="flex items-center justify-center gap-2"
+                    >
+                      Cancel
+                    </Button>
+                  </Link>
+                  {step > 1 && (
+                    <Button
+                      type="button"
+                      onClick={prevStep}
+                      variant="outline"
+                      className="flex items-center justify-center gap-2"
+                    >
+                      <ArrowLeft className="h-4 w-4" />
+                      Previous
+                    </Button>
+                  )}
+                </div>
+                
+                {step < 4 ? (
+                  <Button
+                    type="button"
+                    onClick={nextStep}
+                    className="flex items-center justify-center gap-2 bg-TealGreen hover:bg-TealGreen/90"
+                  >
+                    Next
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                ) : (
+                  <Button
+                    type="submit"
+                    className="bg-TealGreen hover:bg-TealGreen/90"
+                    disabled={!isValid}
+                  >
+                    Submit Application
+                  </Button>
+                )}
               </div>
-            )}
+            </>
+          }
+        >
+          {/* Progress Steps */}
+          <div className="mb-8">
+            <div className="relative flex justify-between">
+              {steps.map((s, i) => (
+                <div key={s.number} className="relative flex flex-col items-center flex-1">
+                  <div
+                    className={cn(
+                      "flex h-8 w-8 items-center justify-center rounded-full border-2 bg-white transition-colors duration-200 z-10",
+                      step > s.number
+                        ? "border-TealGreen bg-TealGreen text-white"
+                        : step === s.number
+                        ? "border-TealGreen text-TealGreen"
+                        : "border-gray-300 text-gray-300"
+                    )}
+                  >
+                    {step > s.number ? (
+                      <Check className="h-4 w-4" />
+                    ) : (
+                      <span>{s.number}</span>
+                    )}
+                  </div>
+                  <span
+                    className={cn(
+                      "mt-2 text-xs font-medium text-center",
+                      step >= s.number ? "text-TealGreen" : "text-gray-500"
+                    )}
+                  >
+                    {s.title}
+                  </span>
+                  {i < steps.length - 1 && (
+                    <div
+                      className={cn(
+                        "absolute left-[50%] right-0 top-4 h-[2px] -translate-y-1/2",
+                        step > s.number ? "bg-TealGreen" : "bg-gray-300"
+                      )}
+                      style={{ width: "100%" }}
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
+
+          {/* Form Steps */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={step}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.2 }}
+            >
+              {step === 1 && <Step1 />}
+              {step === 2 && <Step2 />}
+              {step === 3 && <Step3 />}
+              {step === 4 && (
+                <Review
+                  onBack={() => setStep(3)}
+                  onSubmit={handleSubmit(onSubmit)}
+                />
+              )}
+            </motion.div>
+          </AnimatePresence>
+        </FormCard>
       </form>
     </FormProvider>
   );

@@ -6,6 +6,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { FiPlus, FiFolder, FiClock, FiStar, FiSearch } from "react-icons/fi";
 import { Input } from "@/components/ui/input";
+import { Navbar } from "@/components/Navbar";
+import { Badge } from "@/components/ui/badge";
+import cn from "classnames";
 
 interface Document {
   id: string;
@@ -14,6 +17,8 @@ interface Document {
   createdAt: string;
   status: "draft" | "completed";
   starred: boolean;
+  description: string;
+  lastModified: string;
 }
 
 export default function DashboardPage() {
@@ -29,6 +34,8 @@ export default function DashboardPage() {
       createdAt: "2024-12-14",
       status: "completed",
       starred: true,
+      description: "This is a sample employment agreement.",
+      lastModified: "2024-12-14",
     },
     {
       id: "2",
@@ -37,6 +44,8 @@ export default function DashboardPage() {
       createdAt: "2024-12-13",
       status: "draft",
       starred: false,
+      description: "This is a sample non-disclosure agreement.",
+      lastModified: "2024-12-13",
     },
     {
       id: "3",
@@ -45,6 +54,8 @@ export default function DashboardPage() {
       createdAt: "2024-12-12",
       status: "completed",
       starred: true,
+      description: "This is a sample service agreement.",
+      lastModified: "2024-12-12",
     },
   ];
 
@@ -57,175 +68,105 @@ export default function DashboardPage() {
     return matchesSearch && matchesFilter;
   });
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
-
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-white shadow-sm">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+    <div>
+      <Navbar />
+      <div className="min-h-screen bg-gray-50 pt-40">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold text-gray-900">My Documents</h1>
+            <h1 className="text-3xl font-semibold text-gray-900">Your Documents</h1>
             <Link href="/create">
               <Button className="bg-TealGreen text-white hover:bg-TealGreen/90">
-                <FiPlus className="mr-2 h-4 w-4" />
-                New Document
+                Create New Document
               </Button>
             </Link>
           </div>
-        </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-        {/* Search and Filters */}
-        <div className="mb-8 space-y-4">
-          <div className="flex items-center space-x-4">
-            <div className="relative flex-1">
-              <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+          {/* Search and Filter */}
+          <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative flex-1 max-w-lg">
               <Input
                 type="text"
                 placeholder="Search documents..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
+                className="w-full rounded-lg border border-gray-300 px-4 py-2 pl-10 focus:border-TealGreen focus:outline-none focus:ring-1 focus:ring-TealGreen"
               />
+              <FiSearch className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
             </div>
             <Button
               variant={filter === "all" ? "default" : "outline"}
               onClick={() => setFilter("all")}
-              className="min-w-[100px]"
+              className="w-[180px]"
             >
-              All
-            </Button>
-            <Button
-              variant={filter === "starred" ? "default" : "outline"}
-              onClick={() => setFilter("starred")}
-              className="min-w-[100px]"
-            >
-              <FiStar className="mr-2 h-4 w-4" />
-              Starred
+              All Documents
             </Button>
             <Button
               variant={filter === "draft" ? "default" : "outline"}
               onClick={() => setFilter("draft")}
-              className="min-w-[100px]"
+              className="w-[180px]"
             >
               Drafts
             </Button>
-          </div>
-        </div>
-
-        {/* Documents Grid */}
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-        >
-          {filteredDocuments.map((doc) => (
-            <motion.div
-              key={doc.id}
-              variants={itemVariants}
-              className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+            <Button
+              variant={filter === "completed" ? "default" : "outline"}
+              onClick={() => setFilter("completed")}
+              className="w-[180px]"
             >
-              <div className="p-6">
+              Completed
+            </Button>
+          </div>
+
+          {/* Document Grid */}
+          <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            {filteredDocuments.map((doc, index) => (
+              <div
+                key={index}
+                className="group relative overflow-hidden rounded-xl bg-white p-6 shadow-md transition-all hover:shadow-lg"
+              >
+                <div className="absolute inset-0 -z-10 bg-gradient-to-br from-TealGreen/5 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                 <div className="flex items-start justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-TealGreen/10">
-                      <FiFolder className="h-6 w-6 text-TealGreen" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm font-medium text-gray-900">{doc.title}</h3>
-                      <p className="text-sm text-gray-500">{doc.type}</p>
-                    </div>
+                  <div>
+                    <h3 className="font-medium text-gray-900">{doc.title}</h3>
+                    <p className="mt-1 text-sm text-gray-500">{doc.type}</p>
                   </div>
-                  <button
-                    onClick={() => {/* Toggle star */}}
-                    className={`text-${doc.starred ? "yellow" : "gray"}-400 hover:text-yellow-500`}
-                  >
-                    <FiStar className="h-5 w-5" />
-                  </button>
-                </div>
-                <div className="mt-4 flex items-center justify-between text-sm">
-                  <div className="flex items-center text-gray-500">
-                    <FiClock className="mr-1.5 h-4 w-4" />
-                    {doc.createdAt}
-                  </div>
-                  <span
-                    className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium
-                      ${doc.status === "completed" 
-                        ? "bg-green-100 text-green-800"
-                        : "bg-yellow-100 text-yellow-800"
-                      }`}
+                  <Badge 
+                    variant={doc.status === 'draft' ? 'warning' : 'success'}
                   >
                     {doc.status.charAt(0).toUpperCase() + doc.status.slice(1)}
-                  </span>
+                  </Badge>
                 </div>
-                <div className="mt-4 flex items-center space-x-3">
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => {/* View document */}}
-                  >
-                    View
-                  </Button>
-                  <Button
-                    variant="outline"
-                    className="flex-1"
-                    onClick={() => {/* Edit document */}}
-                  >
-                    Edit
-                  </Button>
+                <p className="mt-4 text-sm text-gray-600 line-clamp-2">
+                  {doc.description}
+                </p>
+                <div className="mt-6 flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="rounded-full border-gray-300 hover:bg-gray-50 hover:text-gray-900"
+                    >
+                      <FiPlus className="mr-2 h-4 w-4" />
+                      Edit
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      className="rounded-full border-gray-300 hover:bg-gray-50 hover:text-gray-900"
+                    >
+                      <FiFolder className="mr-2 h-4 w-4" />
+                      View
+                    </Button>
+                  </div>
+                  <p className="text-sm text-gray-500">
+                    {doc.lastModified}
+                  </p>
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        {/* Empty State */}
-        {filteredDocuments.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center py-12"
-          >
-            <FiFolder className="mx-auto h-12 w-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No documents found</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              {searchQuery
-                ? "Try adjusting your search or filter criteria"
-                : "Get started by creating a new document"}
-            </p>
-            {!searchQuery && (
-              <div className="mt-6">
-                <Link href="/create">
-                  <Button className="bg-TealGreen text-white hover:bg-TealGreen/90">
-                    <FiPlus className="mr-2 h-4 w-4" />
-                    New Document
-                  </Button>
-                </Link>
-              </div>
-            )}
-          </motion.div>
-        )}
-      </main>
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
