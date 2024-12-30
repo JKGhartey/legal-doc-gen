@@ -1,16 +1,26 @@
 "use client";
 
 import { Navbar } from "@/components/Navbar";
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { verify } from 'jsonwebtoken';
 
-export default function DashboardLayout({
+export default async function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      {children}
-    </div>
-  );
+  const token = cookies().get('auth-token');
+  
+  if (!token) {
+    redirect('/auth/login');
+  }
+  
+  try {
+    verify(token.value, process.env.JWT_SECRET!);
+  } catch {
+    redirect('/auth/login');
+  }
+
+  return <>{children}</>;
 }

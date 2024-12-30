@@ -2,39 +2,45 @@ import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { sign } from 'jsonwebtoken';
 import { otpStore } from '@/lib/otpStore';
+import { z } from "zod";
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
+
+const otpSchema = z.object({
+  email: z.string().email(),
+  otp: z.string().length(6)
+});
 
 export async function POST(request: Request) {
   try {
     const { email, otp } = await request.json();
     
-    const storedData = otpStore.get(email);
-    
-    if (!storedData) {
+    const storedData = await otpStore.get(email);
+    if (!storedData || typeof storedData !== 'string') {
       return NextResponse.json(
         { error: 'OTP not found' },
         { status: 400 }
       );
     }
     
-    if (Date.now() > storedData.expiry) {
-      otpStore.delete(email);
+    const { otp: storedOtp, expiry } = JSON.parse(storedData);
+    
+    if (Date.now() > expiry) {
+      await otpStore.delete(email);
       return NextResponse.json(
         { error: 'OTP expired' },
         { status: 400 }
       );
     }
     
-    if (storedData.otp !== otp) {
+    if (storedOtp !== otp) {
       return NextResponse.json(
         { error: 'Invalid OTP' },
         { status: 400 }
       );
     }
     
-    // Clear the OTP
-    otpStore.delete(email);
+    await otpStore.delete(email);
     
     // Generate JWT token
     const token = sign({ email }, JWT_SECRET, { expiresIn: '24h' });
